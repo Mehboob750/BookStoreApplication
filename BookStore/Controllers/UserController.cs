@@ -136,7 +136,6 @@ namespace BookStore.Controllers
                 claims.Add(new Claim(ClaimTypes.Role, userLoginModel.Role.ToString()));
                 claims.Add(new Claim("Id", userLoginModel.Id.ToString()));
                 claims.Add(new Claim("EmailId", userLoginModel.EmailId.ToString()));
-                claims.Add(new Claim("Role", userLoginModel.Role.ToString()));
                 var token = new JwtSecurityToken(
                     claims: claims,
                     expires: DateTime.Now.AddHours(1),

@@ -61,6 +61,12 @@ namespace BookStore
 
             // Add application service for User Repository Layer
             services.AddTransient<IUserRL, UserRL>();
+
+            // Add application service for User Business Layer
+            services.AddTransient<IBookBL, BookBL>();
+
+            // Add application service for User Repository Layer
+            services.AddTransient<IBookRL, BookRL>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddSwaggerGen(c =>
             {
@@ -92,13 +98,13 @@ namespace BookStore
             }
 
             app.UseHttpsRedirection();
+            app.UseAuthentication();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
-
             app.UseSwagger();
             app.UseSwaggerUI(
                 c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "Core API"); });
