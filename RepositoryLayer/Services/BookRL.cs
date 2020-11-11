@@ -43,7 +43,7 @@ namespace RepositoryLayer.Services
                 if (response != null)
                 {
                     response.Quantity = response.Quantity+bookRequest.Quantity;
-                    this.dbContext.BookDetails.Add(response);
+                    this.dbContext.BookDetails.Update(response);
                     this.dbContext.SaveChanges();
                     return Response(response);
                 }
@@ -63,6 +63,36 @@ namespace RepositoryLayer.Services
                     return Response(bookModel);
                 }
               
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
+        public List<BookResponse> GetAllBooks()
+        {
+            try
+            {
+                List<BookResponse> bookResponseList = new List<BookResponse>();
+                var responseList = this.dbContext.BookDetails;
+                foreach (var response in responseList)
+                {
+                    if (response.IsDeleted == "No")
+                    {
+                        BookResponse bookResponse = new BookResponse();
+                        bookResponse.BookId = response.BookId;
+                        bookResponse.BookName = response.BookName;
+                        bookResponse.AuthorName = response.AuthorName;
+                        bookResponse.Description = response.Description;
+                        bookResponse.Price = response.Price;
+                        bookResponse.Quantity = response.Quantity;
+                        bookResponse.CreatedDate = response.CreatedDate;
+                        bookResponse.Image = response.Image;
+                        bookResponseList.Add(bookResponse);
+                    }
+                }
+                return bookResponseList;
             }
             catch (Exception e)
             {

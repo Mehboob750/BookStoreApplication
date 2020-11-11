@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using BusinessLayer.Interface;
 using CommonLayer.Exceptions;
 using CommonLayer.RequestModel;
+using CommonLayer.ResponseModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -51,6 +52,35 @@ namespace BookStore.Controllers
                     bool status = false;
                     var message = "Failed to add";
                     return this.BadRequest(new { status, message });
+                }
+            }
+            catch (Exception e)
+            {
+                return this.BadRequest(new { status = false, message = e.Message });
+            }
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public IActionResult GetAllBooks()
+        {
+            try
+            {
+                List<BookResponse> response = null;
+                // Call the User GetAllBooks Method of BookBL classs
+                response = this.bookBuiseness.GetAllBooks();
+                // check if response is not equal to null
+                if (!response.Count.Equals(0))
+                {
+                    bool status = true;
+                    var message = "Books Read Successfully";
+                    return this.Ok(new { status, message, data = response });
+                }
+                else
+                {
+                    bool status = false;
+                    var message = "Failed to Read";
+                    return this.NotFound(new { status, message });
                 }
             }
             catch (Exception e)
