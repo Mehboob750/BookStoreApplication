@@ -9,5 +9,7 @@ namespace RepositoryLayer.Interface
     public interface IUserRL
     {
         RegisterationResponseModel UserRegistration(RegisterationModel registerationModel);
+
+        LoginResponseModel UserLogin(LoginModel loginModel);
     }
 }

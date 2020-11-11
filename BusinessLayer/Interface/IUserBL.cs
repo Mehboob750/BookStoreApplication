@@ -9,5 +9,7 @@ namespace BusinessLayer.Interface
     public interface IUserBL
     {
         RegisterationResponseModel UserRegistration(RegisterationModel registerationModel);
+
+        LoginResponseModel UserLogin(LoginModel loginModel);
     }
 }

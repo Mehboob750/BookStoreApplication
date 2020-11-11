@@ -19,6 +19,7 @@ namespace RepositoryLayer.Services
 
         UserModel userModel = new UserModel();
         RegisterationResponseModel userResponse = new RegisterationResponseModel();
+        LoginResponseModel loginResponse = new LoginResponseModel();
         /// <summary>
         /// Initializes a new instance of the <see cref="UserRL"/> class.
         /// </summary>
@@ -34,10 +35,10 @@ namespace RepositoryLayer.Services
         private EncryptDecrypt encryptDecrypt = new EncryptDecrypt();
 
         /// <summary>
-        /// This Method is used to add new Record
+        /// This Method is used for Registeration
         /// </summary>
-        /// <param name="quantity">It contains the Object of Quantity Model</param>
-        /// <returns>It returns Added Record</returns>
+        /// <param name="registerationModel">It contains the Object of Registeration Model</param>
+        /// <returns>It returns Registeration Response Model</returns>
         public RegisterationResponseModel UserRegistration(RegisterationModel registerationModel)
         {
             try
@@ -68,6 +69,33 @@ namespace RepositoryLayer.Services
             {
                 throw new Exception(e.Message);
             }
+        }
+
+        public LoginResponseModel UserLogin(LoginModel loginModel)
+        {
+            try
+            {
+                string password = this.encryptDecrypt.EncodePasswordToBase64(loginModel.Password);
+                // Call the User Register Method of User Repository Class
+                var response = this.dbContext.UserRegistrations.FirstOrDefault(value => ((value.EmailId == loginModel.EmailId)) && ((value.Password == password)));
+                if (response != null)
+                {
+                    loginResponse.Id = response.Id;
+                    loginResponse.FirstName = response.FirstName;
+                    loginResponse.LastName = response.LastName;
+                    loginResponse.EmailId = response.EmailId;
+                    loginResponse.PhoneNumber = response.PhoneNumber;
+                    loginResponse.Role = response.Role;
+                    loginResponse.RegistrationDate = response.RegistrationDate;
+                    return loginResponse;
+                }
+                return loginResponse;
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+
         }
 
         public RegisterationResponseModel Response(UserModel userModel)

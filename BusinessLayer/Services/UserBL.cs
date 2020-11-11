@@ -28,7 +28,7 @@ namespace BusinessLayer.Services
         /// This Method is used to User Registration
         /// </summary>
         /// <param name="registrationModel">It contains the Object of Registration Request Model</param>
-        /// <returns>If User Registered Successfully it returns User response Model</returns>
+        /// <returns>If User Registered Successfully it returns Registration response Model</returns>
         public RegisterationResponseModel UserRegistration(RegisterationModel registerationModel)
         {
             try
@@ -41,8 +41,25 @@ namespace BusinessLayer.Services
             {
                 throw new Exception(exception.Message);
             }
-
         }
 
+        /// <summary>
+        /// This Method is used to User Login
+        /// </summary>
+        /// <param name="loginModel">It contains the Object of login Model</param>
+        /// <returns>If User login Successfully it returns login response Model</returns>
+        public LoginResponseModel UserLogin(LoginModel loginModel)
+        {
+            try
+            {
+                // Call the User Register Method of User Repository Class
+                var response = this.userRepository.UserLogin(loginModel);
+                return response;
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+        }
     }
 }
