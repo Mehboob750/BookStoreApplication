@@ -40,5 +40,10 @@ namespace CommonLayer.ResponseModel
         /// Gets or sets the Registration Date
         /// </summary>
         public DateTime RegistrationDate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Token
+        /// </summary>
+        public string Token { get; set; }
     }
 }

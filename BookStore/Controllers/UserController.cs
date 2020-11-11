@@ -1,14 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using BusinessLayer.Interface;
 using CommonLayer.Exceptions;
 using CommonLayer.RequestModel;
+using CommonLayer.ResponseModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 
 namespace BookStore.Controllers
 {
@@ -101,6 +106,8 @@ namespace BookStore.Controllers
                 // check if Id is not equal to zero
                 if (!response.Id.Equals(0))
                 {
+                    string token = this.CreateToken(response);
+                    response.Token = token;
                     bool status = true;
                     var message = "Login Successfully";
                     return this.Ok(new { status, message, data = response });
@@ -115,6 +122,30 @@ namespace BookStore.Controllers
             catch (Exception e)
             {
                 return this.BadRequest(new { status = false, message = e.Message });
+            }
+        }
+
+        private string CreateToken(LoginResponseModel userLoginModel)
+        {
+            try
+            {
+                var symmetricSecuritykey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]));
+                var signingCreds = new SigningCredentials(symmetricSecuritykey, SecurityAlgorithms.HmacSha256);
+
+                var claims = new List<Claim>();
+                claims.Add(new Claim(ClaimTypes.Role, userLoginModel.Role.ToString()));
+                claims.Add(new Claim("Id", userLoginModel.Id.ToString()));
+                claims.Add(new Claim("EmailId", userLoginModel.EmailId.ToString()));
+                claims.Add(new Claim("Role", userLoginModel.Role.ToString()));
+                var token = new JwtSecurityToken(
+                    claims: claims,
+                    expires: DateTime.Now.AddHours(1),
+                    signingCredentials: signingCreds);
+                return new JwtSecurityTokenHandler().WriteToken(token);
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
             }
         }
     }
