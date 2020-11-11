@@ -14,5 +14,7 @@ namespace RepositoryLayer
         }
 
         public DbSet<UserModel> UserRegistrations { get; set; }
+
+        public DbSet<BookModel> BookDetails { get; set; }
     }
 }
