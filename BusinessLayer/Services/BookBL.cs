@@ -51,5 +51,19 @@ namespace BusinessLayer.Services
                 throw new Exception(exception.Message);
             }
         }
+
+        public BookResponse DeleteBook(int Id)
+        {
+            try
+            {
+                // Call the Delete Book Method of Books Repository Class
+                var response = this.bookRepository.DeleteBook(Id);
+                return response;
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+        }
     }
 }

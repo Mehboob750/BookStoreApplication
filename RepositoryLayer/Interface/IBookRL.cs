@@ -11,5 +11,7 @@ namespace RepositoryLayer.Interface
         BookResponse AddBook(BookRequestModel bookRequestModel);
 
         List<BookResponse> GetAllBooks();
+
+        BookResponse DeleteBook(int Id);
     }
 }

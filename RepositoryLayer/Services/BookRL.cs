@@ -100,6 +100,27 @@ namespace RepositoryLayer.Services
             }
         }
 
+        public BookResponse DeleteBook(int Id)
+        {
+            try
+            {
+                var response = this.dbContext.BookDetails.FirstOrDefault(value => ((value.BookId == Id)) && ((value.IsDeleted == "No")));
+
+                if (response != null)
+                {
+                    response.IsDeleted = "Yes";
+                    this.dbContext.BookDetails.Update(response);
+                    this.dbContext.SaveChanges();
+                    return Response(response);
+                }
+                return bookResponse;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
         public BookResponse Response(BookModel bookModel)
         {
             BookResponse bookResponse = new BookResponse();
